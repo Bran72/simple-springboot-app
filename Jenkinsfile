@@ -24,5 +24,14 @@ node {
         sh 'docker push $DOCKER_HUB_USER/simple-springboot-app:latest'
       }
     }
+    
+    stage('SonarQube analysis') {
+      docker.image('maven:3.6-jdk-8-alpine').inside {
+        withSonarQubeEnv('sonarqube') {
+          sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0:sonar'
+        }
+      }
+    }
+    
   }
 }
